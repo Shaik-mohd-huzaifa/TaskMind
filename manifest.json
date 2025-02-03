@@ -1,0 +1,51 @@
+{
+  "manifest_version": 3,
+  "name": "Website Task Manager",
+  "version": "1.0",
+  "description": "Manage and track tasks associated with specific websites",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "tabs",
+    "commands"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon96.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "css": ["content.css"],
+      "js": ["llm-service.js", "content.js"]
+    }
+  ],
+  "commands": {
+    "toggle-kanban": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+T",
+        "mac": "Command+Shift+T"
+      },
+      "description": "Toggle Kanban board"
+    }
+  },
+  "web_accessible_resources": [{
+    "resources": ["icons/*"],
+    "matches": ["<all_urls>"]
+  }],
+  "host_permissions": [
+    "https://api.openai.com/*"
+  ],
+  "icons": {
+    "16": "icons/icon48.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon96.png"
+  }
+} 

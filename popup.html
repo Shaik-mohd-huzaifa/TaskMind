@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>TaskMind</title>
+    <style>
+        body {
+            width: 400px;
+            min-height: 500px;
+            margin: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f9fafb;
+        }
+
+        .popup-container {
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .header h1 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #111827;
+            margin: 0;
+        }
+
+        .open-dashboard {
+            padding: 8px 16px;
+            background: #111827;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .open-dashboard:hover {
+            background: #374151;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e7eb;
+            transition: all 0.2s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-title {
+            font-size: 13px;
+            font-weight: 500;
+            color: #6b7280;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 600;
+            color: #111827;
+        }
+
+        .sites-section {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e7eb;
+        }
+
+        .sites-header {
+            font-size: 14px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sites-header::before {
+            content: '';
+            width: 16px;
+            height: 16px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236b7280'%3E%3Cpath fill-rule='evenodd' d='M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25zM6.262 6.072a8.25 8.25 0 1010.562-.766 4.5 4.5 0 01-1.318 1.357L14.25 7.5l.165.33a.809.809 0 01-1.086 1.085l-.604-.302a1.125 1.125 0 00-1.298.21l-.132.131c-.439.44-.439 1.152 0 1.591l.296.296c.256.257.622.374.98.314l1.17-.195c.323-.054.654.036.905.245l1.33 1.108c.32.267.46.694.358 1.1a8.7 8.7 0 01-2.288 4.04l-.723.724a1.125 1.125 0 01-1.298.21l-.153-.076a1.125 1.125 0 01-.622-1.006v-1.089c0-.298-.119-.585-.33-.796l-1.347-1.347a1.125 1.125 0 01-.21-1.298L9.75 12l-1.64-1.64a6 6 0 01-1.676-3.257l-.172-1.03z' clip-rule='evenodd' /%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            opacity: 0.7;
+        }
+
+        .site-list {
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 4px;
+            margin: 0 -4px;
+        }
+
+        .site-list::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .site-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .site-list::-webkit-scrollbar-thumb {
+            background-color: #e5e7eb;
+            border-radius: 20px;
+            border: 2px solid #f8fafc;
+        }
+
+        .site-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .site-favicon {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            object-fit: contain;
+        }
+
+        .site-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 4px;
+            transition: all 0.2s ease;
+            background: white;
+            border: 1px solid transparent;
+        }
+
+        .site-item:hover {
+            background: #f8fafc;
+            border-color: #e5e7eb;
+            transform: translateX(4px);
+        }
+
+        .site-name {
+            font-size: 14px;
+            color: #374151;
+            font-weight: 500;
+        }
+
+        .site-stats {
+            display: flex;
+            gap: 8px;
+            font-size: 12px;
+        }
+
+        .stat-badge {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .task-badge {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .task-badge:hover {
+            background: #bfdbfe;
+        }
+
+        .note-badge {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .note-badge:hover {
+            background: #fde68a;
+        }
+
+        .stat-badge svg {
+            width: 14px;
+            height: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="popup-container">
+        <div class="header">
+            <h1>TaskMind</h1>
+            <button class="open-dashboard" id="openDashboard">Open Dashboard</button>
+        </div>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-title">Total Tasks</div>
+                <div class="stat-value" id="totalTasks">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Total Notes</div>
+                <div class="stat-value" id="totalNotes">0</div>
+            </div>
+        </div>
+        <div class="sites-section">
+            <div class="sites-header">Active Sites</div>
+            <div class="site-list" id="siteList">
+                <!-- Site items will be added here dynamically -->
+            </div>
+        </div>
+    </div>
+    <script src="popup.js"></script>
+</body>
+</html> 
