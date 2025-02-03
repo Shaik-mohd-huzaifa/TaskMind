@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Website Task Manager",
+  "name": "TaskMind",
   "version": "1.0",
-  "description": "Manage and track tasks associated with specific websites",
+  "description": "An intelligent task manager that helps you organize website-specific tasks, take smart notes, and leverage AI assistance while browsing",
   "permissions": [
     "storage",
     "activeTab",

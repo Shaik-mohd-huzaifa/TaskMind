@@ -1,6 +1,26 @@
-# TaskMind - Chrome Extension
+# TaskMind
 
-A powerful Chrome extension that helps you manage tasks, take notes, and interact with AI while browsing the web. Perfect for organizing your webpage-specific tasks and notes.
+TaskMind is an intelligent Chrome extension designed to revolutionize how you manage tasks and take notes while browsing the web. It provides a seamless, website-specific task management system that helps you stay organized and productive.
+
+## What is TaskMind?
+
+TaskMind integrates directly into your browsing experience, offering a floating, draggable interface that can be accessed on any webpage. The extension creates a dedicated workspace for each website you visit, allowing you to:
+
+- **Organize Tasks**: Create and manage website-specific tasks using a Kanban-style board with To Do, In Progress, and Done columns
+- **Take Smart Notes**: Capture important information with markdown support and AI-powered content enhancement
+- **Track Progress**: Monitor your productivity with a comprehensive analytics dashboard
+- **Chat with AI**: Get intelligent assistance for your tasks and notes through natural conversation
+- **Stay Focused**: Keep track of deadlines and important tasks with a persistent, unobtrusive floating icon
+
+## Why TaskMind?
+
+- 🎯 **Website Context**: All tasks and notes are organized by website, making it easy to manage site-specific activities
+- 🤖 **AI-Powered**: Leverage OpenAI's technology to enhance task descriptions and note content
+- 📊 **Analytics**: Gain insights into your task completion rates and website engagement
+- 💻 **User-Friendly**: Intuitive drag-and-drop interface with modern design
+- 🔒 **Privacy-Focused**: Your data is stored locally in Chrome's storage
+
+Whether you're researching, working on projects, or just trying to stay organized while browsing, TaskMind provides the tools you need to manage your online tasks effectively.
 
 ## Features
 
