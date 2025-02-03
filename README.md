@@ -1,6 +1,6 @@
-# Hackathon Buddy - Chrome Extension
+# TaskMind - Chrome Extension
 
-A powerful Chrome extension that helps you manage tasks, take notes, and interact with AI while browsing the web. Perfect for hackathons, research, and project management.
+A powerful Chrome extension that helps you manage tasks, take notes, and interact with AI while browsing the web. Perfect for organizing your webpage-specific tasks and notes.
 
 ## Features
 
@@ -12,6 +12,7 @@ A powerful Chrome extension that helps you manage tasks, take notes, and interac
 - 🔍 Smart search across tasks and notes
 - 🎯 Task deadline tracking
 - 📈 Progress analytics
+- 🔄 Draggable floating icon
 
 ## Installation Guide
 
@@ -19,32 +20,35 @@ A powerful Chrome extension that helps you manage tasks, take notes, and interac
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/yourusername/hackathon-buddy.git
-   cd hackathon-buddy
+   git clone https://github.com/Shaik-mohd-huzaifa/TaskMind.git
+   cd TaskMind
    ```
 
 2. **Configure OpenAI API Key**
-   - Open `background.js`
-   - Locate the `llmService` configuration section
-   - Replace `'your-api-key'` with your OpenAI API key:
+   - Open `llm-service.js`
+   - Locate the `LLMService` class constructor
+   - Replace the `apiKey` with your OpenAI API key:
    ```javascript
-   window.llmService = {
-       apiKey: 'your-openai-api-key-here',
-       // ... other configurations
-   };
+   class LLMService {
+       constructor() {
+           this.apiKey = 'your-openai-api-key-here';
+           // ... other configurations
+       }
+   }
    ```
 
 3. **Load the Extension in Chrome**
    - Open Chrome and navigate to `chrome://extensions/`
    - Enable "Developer mode" in the top right corner
    - Click "Load unpacked"
-   - Select the directory containing the extension files
+   - Select the TaskMind directory
 
 ### Usage
 
 1. **Access the Extension**
    - Click the extension icon in the Chrome toolbar
    - Use the keyboard shortcut `Ctrl+Shift+T` (or `Cmd+Shift+T` on Mac)
+   - Use the draggable floating icon on any webpage
 
 2. **Task Management**
    - Create tasks with `+ Add New Task`
@@ -78,16 +82,9 @@ A powerful Chrome extension that helps you manage tasks, take notes, and interac
    - Generate a new API key
 
 2. **Configure the Extension**
-   - Locate `background.js` in the extension directory
-   - Find the `llmService` configuration:
-   ```javascript
-   window.llmService = {
-       apiKey: 'your-openai-api-key-here',
-       model: 'gpt-3.5-turbo',
-       // ... other settings
-   };
-   ```
-   - Replace `'your-openai-api-key-here'` with your actual OpenAI API key
+   - Locate `llm-service.js` in the extension directory
+   - Find the `LLMService` class constructor
+   - Replace the `apiKey` with your actual OpenAI API key
    - Save the file
    - Reload the extension in Chrome
 
@@ -99,15 +96,15 @@ A powerful Chrome extension that helps you manage tasks, take notes, and interac
 
 ### Project Structure
 ```
-hackathon-buddy/
+TaskMind/
 ├── manifest.json        # Extension configuration
 ├── popup.html          # Extension popup interface
 ├── content.js          # Content script for web page interaction
-├── background.js       # Background script with API key config
-├── styles/            
-│   └── main.css        # Main stylesheet
-└── assets/
-    └── icons/          # Extension icons
+├── background.js       # Background script
+├── llm-service.js      # AI service configuration
+├── content.css         # Content styles
+├── styles.css          # Popup styles
+└── icons/              # Extension icons
 ```
 
 ### Contributing
@@ -124,6 +121,6 @@ MIT License - feel free to use and modify for your own projects!
 ## Support
 
 If you encounter any issues or have questions:
-1. Check the [Issues](https://github.com/yourusername/hackathon-buddy/issues) section
+1. Check the [Issues](https://github.com/Shaik-mohd-huzaifa/TaskMind/issues) section
 2. Create a new issue with detailed information
 3. Join our community discussions 

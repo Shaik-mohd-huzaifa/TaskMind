@@ -6,12 +6,15 @@ let floatingIcon = null;
 function createFloatingIcon() {
     if (floatingIcon) return floatingIcon;
 
+    // Get saved position or use default
+    const savedPosition = JSON.parse(localStorage.getItem('floatingIconPosition')) || { top: '20px', right: '20px' };
+
     floatingIcon = document.createElement('div');
     floatingIcon.id = 'task-manager-floating-icon';
     floatingIcon.style.cssText = `
         position: fixed;
-        top: 20px;
-        right: 20px;
+        top: ${savedPosition.top};
+        right: ${savedPosition.right};
         z-index: 9999;
         display: flex;
         align-items: center;
@@ -21,8 +24,10 @@ function createFloatingIcon() {
         background: #4F46E5;
         border-radius: 50%;
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        cursor: pointer;
+        cursor: grab;
         transition: all 0.2s ease-in-out;
+        touch-action: none;
+        user-select: none;
     `;
     
     floatingIcon.innerHTML = `
@@ -33,6 +38,7 @@ function createFloatingIcon() {
             width: 24px;
             height: 24px;
             color: white;
+            pointer-events: none;
         ">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M5.566 4.657A4.505 4.505 0 016.75 4.5h10.5c.41 0 .806.055 1.183.157A3 3 0 0015.75 3h-7.5a3 3 0 00-2.684 1.657zM2.25 12a3 3 0 013-3h13.5a3 3 0 013 3v6a3 3 0 01-3 3H5.25a3 3 0 01-3-3v-6zM5.25 7.5c-.41 0-.806.055-1.184.157A3 3 0 016.75 6h10.5a3 3 0 012.684 1.657A4.505 4.505 0 0018.75 7.5H5.25z"/>
@@ -55,29 +61,107 @@ function createFloatingIcon() {
             justify-content: center;
             opacity: 0;
             transition: opacity 0.2s ease-in-out;
+            pointer-events: none;
         ">0</div>
     `;
 
     // Add hover effect
     floatingIcon.addEventListener('mouseenter', () => {
-        floatingIcon.style.transform = 'scale(1.1)';
-        floatingIcon.style.boxShadow = '0 8px 12px -2px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.1)';
+        if (!isDragging) {
+            floatingIcon.style.transform = 'scale(1.1)';
+            floatingIcon.style.boxShadow = '0 8px 12px -2px rgba(0, 0, 0, 0.15), 0 4px 6px -2px rgba(0, 0, 0, 0.1)';
+        }
     });
 
     floatingIcon.addEventListener('mouseleave', () => {
-        floatingIcon.style.transform = 'scale(1)';
-        floatingIcon.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)';
+        if (!isDragging) {
+            floatingIcon.style.transform = 'scale(1)';
+            floatingIcon.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)';
+        }
+    });
+
+    // Add drag functionality
+    let isDragging = false;
+    let currentX;
+    let currentY;
+    let initialX;
+    let initialY;
+    let xOffset = 0;
+    let yOffset = 0;
+
+    function dragStart(e) {
+        if (e.type === "touchstart") {
+            initialX = e.touches[0].clientX - xOffset;
+            initialY = e.touches[0].clientY - yOffset;
+        } else {
+            initialX = e.clientX - xOffset;
+            initialY = e.clientY - yOffset;
+        }
+
+        if (e.target === floatingIcon) {
+            isDragging = true;
+            floatingIcon.style.cursor = 'grabbing';
+            floatingIcon.style.transition = 'none';
+        }
+    }
+
+    function dragEnd() {
+        if (isDragging) {
+            isDragging = false;
+            floatingIcon.style.cursor = 'grab';
+            floatingIcon.style.transition = 'all 0.2s ease-in-out';
+
+            // Save position
+            const rect = floatingIcon.getBoundingClientRect();
+            const position = {
+                top: rect.top + 'px',
+                right: (window.innerWidth - rect.right) + 'px'
+            };
+            localStorage.setItem('floatingIconPosition', JSON.stringify(position));
+        }
+    }
+
+    function drag(e) {
+        if (isDragging) {
+            e.preventDefault();
+
+            if (e.type === "touchmove") {
+                currentX = e.touches[0].clientX - initialX;
+                currentY = e.touches[0].clientY - initialY;
+            } else {
+                currentX = e.clientX - initialX;
+                currentY = e.clientY - initialY;
+            }
+
+            xOffset = currentX;
+            yOffset = currentY;
+
+            // Calculate position relative to viewport
+            const newTop = Math.max(0, Math.min(window.innerHeight - floatingIcon.offsetHeight, currentY));
+            const newLeft = Math.max(0, Math.min(window.innerWidth - floatingIcon.offsetWidth, currentX));
+
+            floatingIcon.style.transform = `translate(${newLeft}px, ${newTop}px)`;
+        }
+    }
+
+    // Add event listeners for drag functionality
+    floatingIcon.addEventListener('mousedown', dragStart);
+    floatingIcon.addEventListener('touchstart', dragStart, { passive: true });
+    document.addEventListener('mousemove', drag);
+    document.addEventListener('touchmove', drag, { passive: false });
+    document.addEventListener('mouseup', dragEnd);
+    document.addEventListener('touchend', dragEnd);
+
+    // Add click handler for showing Kanban board
+    floatingIcon.addEventListener('click', (e) => {
+        if (!isDragging) {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleKanban();
+        }
     });
 
     document.body.appendChild(floatingIcon);
-    
-    // Simplified click handler
-    floatingIcon.addEventListener('click', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        toggleKanban();
-    });
-    
     return floatingIcon;
 }
 
